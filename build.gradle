@@ -1,0 +1,26 @@
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+
+    repositories {
+        mavenCentral()
+    }
+
+    task wrapper(type: Wrapper) {
+        gradleVersion = '6.8'
+    }
+
+    publishing {
+        repositories {
+            maven {
+                name = "Shareable Libraries"
+                url = uri("https://maven.pkg.github.com/volodymyrd/shareable-libs")
+                credentials {
+                    // ~/.gradle/gradle.properties
+                    username = project.findProperty("repo.user") ?: System.getenv("USERNAME")
+                    password = project.findProperty("mvn_repo_rw.key") ?: System.getenv("TOKEN")
+                }
+            }
+        }
+    }
+}

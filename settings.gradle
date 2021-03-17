@@ -1,0 +1,3 @@
+rootProject.name = 'shareable-libs'
+include 'message-consumer'
+include 'message-producer'
