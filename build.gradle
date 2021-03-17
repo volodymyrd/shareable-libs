@@ -13,7 +13,7 @@ subprojects {
     publishing {
         repositories {
             maven {
-                name = "Shareable Libraries"
+                name = "Shareable-Libraries"
                 url = uri("https://maven.pkg.github.com/volodymyrd/shareable-libs")
                 credentials {
                     // ~/.gradle/gradle.properties
