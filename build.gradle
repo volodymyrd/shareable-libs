@@ -1,6 +1,41 @@
+// SonarLint
+plugins {
+    id "name.remal.sonarlint" version "1.2.2"
+}
+
+defaultTasks 'clean', 'build'
+
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
+    apply plugin: "name.remal.sonarlint"
+
+    ext {
+        versions = [
+                assertj    : '3.19.0',
+                junit      : '5.7.0',
+                guava      : '30.1-jre',
+        ]
+
+        libs = [:]
+
+        libs.guava = ["com.google.guava:guava:${versions.guava}"]
+
+        libs.test = ["org.assertj:assertj-core:${versions.assertj}",
+                     "org.junit.jupiter:junit-jupiter-core:${versions.junit}",
+                     "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
+                     "org.junit.jupiter:junit-jupiter-params:${versions.junit}"]
+    }
+
+    sourceCompatibility = targetCompatibility = 1.8
+
+    compileJava {
+        options.encoding = "UTF-8"
+    }
+
+    compileTestJava {
+        options.encoding = "UTF-8"
+    }
 
     repositories {
         mavenCentral()
@@ -8,6 +43,19 @@ subprojects {
 
     task wrapper(type: Wrapper) {
         gradleVersion = '6.8'
+    }
+
+    test {
+        testLogging {
+            afterSuite { desc, result ->
+                if (!desc.parent) { // will match the outermost suite
+                    println "Results: " +
+                            "${result.resultType} (${result.testCount} tests, " +
+                            "${result.successfulTestCount} successes, ${result.failedTestCount} failures, " +
+                            "${result.skippedTestCount} skipped)"
+                }
+            }
+        }
     }
 
     publishing {

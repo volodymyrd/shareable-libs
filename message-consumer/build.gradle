@@ -1,2 +1,52 @@
 dependencies {
+    implementation libs.guava
+
+    testImplementation libs.test
+}
+
+jar {
+    def cmd = "git rev-parse --short HEAD"
+    def proc = cmd.execute()
+    ext.revision = proc.text.trim()
+
+    manifest {
+        attributes(
+                "Implementation-Version": version + " build: " + ext.revision,
+                "releases-date": new Date().format("yyyy-MM-dd'T 'HH:mm:ss.SSSZZ"),
+                "Specification-Vendor": "Volmyr.com",
+                "Specification-Title": "Message Bus Consumer"
+        )
+    }
+
+    baseName 'message-consumer'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.volmyr.shareable'
+            artifactId = 'message-consumer'
+            version = version
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'Message Bus Consumer'
+                description = 'Provide Message Bus Consumer'
+                developers {
+                    developer {
+                        id = 'volodymyrd'
+                        name = 'Volodymyr Dotsenko'
+                        email = 'volodymyrdotsenko@volmyr.com'
+                    }
+                }
+            }
+        }
+    }
 }
