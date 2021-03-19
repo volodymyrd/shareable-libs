@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package message_bus.producer.kafka;
+
+option java_multiple_files = true;
+option java_outer_classname = "KafkaMessageProducerConfigProtos";
+option java_package = "com.volmyr.message_bus.producer.kafka";
+
+message KafkaMessageProducerConfig {
+    /** <code>bootstrap.servers</code> */
+    string bootstrap_servers = 1;
+
+    /** <code>acks</code> */
+    string acks = 10;
+
+    /** <code>linger.ms</code> */
+    int64 linger_ms = 12;
+
+    /** <code>retries</code> */
+    int32 retries = 20;
+
+    /** <code>key.serializer</code> */
+    string key_serializer = 30;
+
+    /** <code>value.serializer</code> */
+    string value_serializer = 31;
+}

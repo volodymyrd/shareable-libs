@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package message_bus.producer;
+
+option java_multiple_files = true;
+option java_outer_classname = "MessageProducerResponseProtos";
+option java_package = "com.volmyr.message_bus.producer";
+
+enum ResponseType {
+    HTTP = 0;
+    KAFKA = 1;
+    PUB_SUB = 2;
+}
+
+message MessageProducerResponse {
+    ResponseType type = 1;
+
+    oneof response {
+        KafkaResponse kafka_response = 10;
+    }
+}
+
+message KafkaResponse {
+    int64 timestamp = 1;
+    int64 offset = 2;
+    int32 serialized_key_size = 3;
+    int32 serialized_value_size = 4;
+    string topic = 5;
+    int32 partition = 6;
+}

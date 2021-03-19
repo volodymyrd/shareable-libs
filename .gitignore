@@ -3,7 +3,9 @@
 .gradle
 
 message-consumer/build
+message-consumer/src/main/generated
 message-consumer/out
 
 message-producer/build
+message-producer/src/main/generated
 message-producer/out
