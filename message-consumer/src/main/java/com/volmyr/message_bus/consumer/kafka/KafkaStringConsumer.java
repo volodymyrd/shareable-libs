@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
+import com.google.protobuf.Value;
 import com.google.protobuf.util.JsonFormat;
 import com.volmyr.message_bus.MessageEvent;
 import com.volmyr.message_bus.consumer.MessageConsumer;
@@ -115,7 +116,12 @@ public abstract class KafkaStringConsumer implements MessageConsumer {
 
   private static Message fromJson(String json, Message.Builder builder)
       throws InvalidProtocolBufferException {
-    JsonFormat.parser().merge(json, builder);
+    JsonFormat
+        .parser()
+        .usingTypeRegistry(JsonFormat.TypeRegistry.newBuilder()
+            .add(ImmutableList.of(Value.getDescriptor()))
+            .build())
+        .merge(json, builder);
     return builder.build();
   }
 }

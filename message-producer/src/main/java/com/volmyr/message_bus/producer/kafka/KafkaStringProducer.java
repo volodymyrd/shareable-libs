@@ -63,6 +63,7 @@ public final class KafkaStringProducer implements MessageProducer {
       RecordMetadata metadata = producer
           .send(new ProducerRecord<>(topic, toJson(event)))
           .get(timeoutMs, TimeUnit.MILLISECONDS);
+      logger.info("Got a producer response {}", metadata);
       return MessageProducerResponse.newBuilder()
           .setType(ResponseType.KAFKA)
           .setKafkaResponse(KafkaResponse.newBuilder()

@@ -74,6 +74,7 @@ dependencies {
     integrationTestImplementation libs.kafka
     integrationTestImplementation libs.protobuf
     integrationTestImplementation libs.protobuf_util
+    integrationTestImplementation libs.slf4j_simple
     integrationTestImplementation libs.test
 }
 
