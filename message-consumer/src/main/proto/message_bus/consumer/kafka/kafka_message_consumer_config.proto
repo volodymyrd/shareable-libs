@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package message_bus.consumer.kafka;
+
+option java_multiple_files = true;
+option java_outer_classname = "KafkaMessageConsumerConfigProtos";
+option java_package = "com.volmyr.message_bus.consumer.kafka";
+
+message KafkaMessageConsumerConfig {
+  /** <code>bootstrap.servers</code> */
+  string bootstrap_servers = 1;
+
+  /** <code>group.id</code> */
+  string group_id = 10;
+
+  /** <code>enable.auto.commit</code> */
+  bool enable_auto_commit = 12;
+
+  /** <code>auto.commit.interval.ms</code> */
+  int32 auto_commit_interval_ms = 13;
+
+  /** <code>key.deserializer</code> */
+  string key_deserializer = 30;
+
+  /** <code>value.deserializer</code> */
+  string value_deserializer = 31;
+}

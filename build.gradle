@@ -28,6 +28,7 @@ subprojects {
                 kafka          : '2.7.0',
                 protobuf       : '3.12.1',
                 protobuf_gradle: '0.8.12',
+                slf4j          : '1.7.26',
         ]
 
         libs = [:]
@@ -42,6 +43,10 @@ subprojects {
                 "com.google.protobuf:protobuf-gradle-plugin:${versions.protobuf_gradle}"
 
         libs.protobuf_util = ["com.google.protobuf:protobuf-java-util:${versions.protobuf}"]
+
+        libs.slf4j = ["org.slf4j:slf4j-api:${versions.slf4j}"]
+
+        libs.slf4j_simple = ["org.slf4j:slf4j-simple:${versions.slf4j}"]
 
         libs.test = ["org.assertj:assertj-core:${versions.assertj}",
                      "org.junit.jupiter:junit-jupiter-api:${versions.junit}",

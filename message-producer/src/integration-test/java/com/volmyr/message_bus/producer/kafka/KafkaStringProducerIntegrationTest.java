@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.google.protobuf.Any;
 import com.google.protobuf.Value;
+import com.volmyr.message_bus.MessageEvent;
+import com.volmyr.message_bus.MessageEventType;
 import com.volmyr.message_bus.producer.MessageProducerException;
-import com.volmyr.message_bus.producer.MessageProducerRequest;
 import com.volmyr.message_bus.producer.MessageProducerResponse;
-import com.volmyr.message_bus.producer.RequestType;
 import com.volmyr.message_bus.producer.ResponseType;
 import java.util.Date;
 import java.util.UUID;
@@ -32,8 +32,8 @@ public class KafkaStringProducerIntegrationTest {
 
   @Test
   void shouldSendMessage() throws MessageProducerException {
-    MessageProducerResponse response = PRODUCER.send(MessageProducerRequest.newBuilder()
-        .setType(RequestType.TYPE1)
+    MessageProducerResponse response = PRODUCER.send(MessageEvent.newBuilder()
+        .setType(MessageEventType.TYPE1)
         .setCreatedTimestamp(new Date().getTime())
         .setId(UUID.randomUUID().toString())
         .setStringData("Hello Kafka")

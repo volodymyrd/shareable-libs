@@ -2,6 +2,10 @@
 .idea
 .gradle
 
+message-bus-model/build
+message-bus-model/src/main/generated
+message-bus-model/out
+
 message-consumer/build
 message-consumer/src/main/generated
 message-consumer/out

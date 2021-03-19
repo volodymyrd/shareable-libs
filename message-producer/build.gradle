@@ -58,12 +58,17 @@ clean {
 }
 
 dependencies {
+    implementation project(':message-bus-model')
+
     implementation libs.guava
     implementation libs.kafka
     implementation libs.protobuf
     implementation libs.protobuf_util
+    implementation libs.slf4j
 
     testImplementation libs.test
+
+    integrationTestImplementation project(':message-bus-model')
 
     integrationTestImplementation libs.guava
     integrationTestImplementation libs.kafka
