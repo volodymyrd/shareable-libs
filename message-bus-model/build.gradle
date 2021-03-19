@@ -1,0 +1,43 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath libs.protobuf_gradle
+    }
+}
+
+apply plugin: 'idea'
+apply plugin: 'com.google.protobuf'
+
+protobuf {
+    generatedFilesBaseDir = "$projectDir/src/main/generated"
+    protoc {
+        artifact = libs.protoc
+    }
+}
+
+clean {
+    delete protobuf.generatedFilesBaseDir
+}
+
+dependencies {
+    implementation libs.protobuf
+}
+
+jar {
+    def cmd = "git rev-parse --short HEAD"
+    def proc = cmd.execute()
+    ext.revision = proc.text.trim()
+
+    manifest {
+        attributes(
+                "Implementation-Version": version + " build: " + ext.revision,
+                "releases-date": new Date().format("yyyy-MM-dd'T 'HH:mm:ss.SSSZZ"),
+                "Specification-Vendor": "Volmyr.com",
+                "Specification-Title": "Message Bus Model"
+        )
+    }
+
+    baseName 'message-bus-model'
+}
