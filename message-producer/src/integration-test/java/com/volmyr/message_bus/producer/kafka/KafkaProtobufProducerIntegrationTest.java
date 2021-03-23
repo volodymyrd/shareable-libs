@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
  */
 public class KafkaProtobufProducerIntegrationTest {
 
-  private static final KafkaStringProducer PRODUCER = new KafkaStringProducer(
+  private static final KafkaProtobufProducer PRODUCER = new KafkaProtobufProducer(
       "topic1",
       50_000,
       KafkaMessageProducerConfig.newBuilder()
@@ -27,6 +27,7 @@ public class KafkaProtobufProducerIntegrationTest {
           .setAcks("all")
           .setLingerMs(1)
           .setKeySerializer("org.apache.kafka.common.serialization.StringSerializer")
+          .setValueSerializer("org.apache.kafka.common.serialization.ByteArraySerializer")
           .build());
 
   @Test
