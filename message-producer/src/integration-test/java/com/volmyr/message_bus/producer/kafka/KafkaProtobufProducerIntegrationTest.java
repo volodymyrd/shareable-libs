@@ -15,9 +15,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 /**
- * Integration tests for {@link KafkaStringProducer}.
+ * Integration tests for {@link KafkaProtobufProducer}.
  */
-public class KafkaStringProducerIntegrationTest {
+public class KafkaProtobufProducerIntegrationTest {
 
   private static final KafkaStringProducer PRODUCER = new KafkaStringProducer(
       "topic1",
@@ -27,7 +27,6 @@ public class KafkaStringProducerIntegrationTest {
           .setAcks("all")
           .setLingerMs(1)
           .setKeySerializer("org.apache.kafka.common.serialization.StringSerializer")
-          .setValueSerializer("org.apache.kafka.common.serialization.StringSerializer")
           .build());
 
   @Test
