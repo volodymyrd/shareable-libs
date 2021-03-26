@@ -7,24 +7,30 @@ option java_outer_classname = "MessageProducerResponseProtos";
 option java_package = "com.volmyr.message_bus.producer";
 
 enum ResponseType {
-    HTTP = 0;
-    KAFKA = 1;
-    PUB_SUB = 2;
+  HTTP = 0;
+  KAFKA = 1;
+  PUB_SUB = 2;
 }
 
 message MessageProducerResponse {
-    ResponseType type = 1;
+  ResponseType type = 1;
 
-    oneof response {
-        KafkaResponse kafka_response = 10;
-    }
+  oneof response {
+    KafkaResponse kafka_response = 10;
+    HttpResponse http_response = 12;
+  }
 }
 
 message KafkaResponse {
-    int64 timestamp = 1;
-    int64 offset = 2;
-    int32 serialized_key_size = 3;
-    int32 serialized_value_size = 4;
-    string topic = 5;
-    int32 partition = 6;
+  int64 timestamp = 1;
+  int64 offset = 2;
+  int32 serialized_key_size = 3;
+  int32 serialized_value_size = 4;
+  string topic = 5;
+  int32 partition = 6;
+}
+
+message HttpResponse {
+  int32 responseCode = 1;
+  string response = 3;
 }
