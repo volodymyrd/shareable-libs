@@ -17,18 +17,24 @@ public class KafkaStringConsumerIntegrationTest {
       ImmutableList.of("topic1"),
       2_000,
       KafkaMessageConsumerConfig.newBuilder()
-          .setBootstrapServers("localhost:9092")
+          .setBootstrapServers("localhost:9093")
           .setGroupId("group")
-          .setEnableAutoCommit(true)
-          .setAutoCommitIntervalMs(1000)
+          .setEnableAutoCommit(false)
+          //.setAutoCommitIntervalMs(1000)
           .setKeyDeserializer("org.apache.kafka.common.serialization.StringDeserializer")
           .setValueDeserializer("org.apache.kafka.common.serialization.StringDeserializer")
           .build()) {
+
+    private int counter;
 
     @Override
     public void handle(MessageEvent event) throws MessageConsumerException {
       assertThat(event.getType()).isEqualTo(MessageEventType.TYPE1);
       assertThat(event.getId()).isNotEmpty();
+      counter++;
+      if (counter < 10) {
+        throw new MessageConsumerException("Counter less 10 but is " + counter);
+      }
     }
   };
 

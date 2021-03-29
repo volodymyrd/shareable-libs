@@ -8,11 +8,15 @@ import com.volmyr.message_bus.MessageEvent;
 import com.volmyr.message_bus.consumer.MessageConsumer;
 import com.volmyr.message_bus.consumer.MessageConsumerException;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,9 +70,9 @@ public abstract class KafkaAbstractConsumer<K, V> implements MessageConsumer {
       while (!closed.get()) {
         ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(pollDurationMs));
         if (!records.isEmpty()) {
-          logger.info("Consumer {} got {}, start handling...", this, records.count());
+          logger.info("Consumer {} got {} records, start handling...", this, records.count());
         } else {
-          logger.debug("Consumer {} got not records", this);
+          logger.debug("Consumer {} got no records", this);
         }
         for (ConsumerRecord<K, V> record : records) {
           logger.info("Start handling a record {}...", record);
@@ -87,13 +91,6 @@ public abstract class KafkaAbstractConsumer<K, V> implements MessageConsumer {
   }
 
   @Override
-  public void commit() {
-    if (!enableAutoCommit) {
-      consumer.commitSync();
-    }
-  }
-
-  @Override
   public void shutdown() {
     closed.set(true);
     consumer.wakeup();
@@ -105,11 +102,24 @@ public abstract class KafkaAbstractConsumer<K, V> implements MessageConsumer {
   private void handle(ConsumerRecord<K, V> record) {
     try {
       handle(convert(record));
+      commit(record);
     } catch (MessageConsumerException e) {
       logger.error("Error handling a record " + record, e);
+      logger.debug("Overriding the fetch offsets for the next pull, because of error...");
+      consumer.seek(new TopicPartition(record.topic(), record.partition()), record.offset());
     } catch (KafkaConsumerRecordConvertException e) {
       logger.error("Error handling a record " + record, e);
-      commit();
+      commit(record);
+    }
+  }
+
+  private void commit(ConsumerRecord<K, V> record) {
+    if (!enableAutoCommit) {
+      logger.info("Committing the record {}...", record);
+      Map<TopicPartition, OffsetAndMetadata> offsets = new HashMap<>();
+      offsets.put(new TopicPartition(record.topic(), record.partition()),
+          new OffsetAndMetadata(record.offset() + 1));
+      consumer.commitSync(offsets);
     }
   }
 }

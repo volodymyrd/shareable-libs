@@ -12,7 +12,8 @@ public interface MessageConsumer extends Runnable {
    */
   void handle(MessageEvent event) throws MessageConsumerException;
 
-  void commit();
-
+  /**
+   * Closes the consumer and releases resources.
+   */
   void shutdown();
 }
