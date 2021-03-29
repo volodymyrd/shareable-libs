@@ -23,7 +23,7 @@ public class KafkaProtobufProducerIntegrationTest {
       "topic1",
       50_000,
       KafkaMessageProducerConfig.newBuilder()
-          .setBootstrapServers("localhost:9092")
+          .setBootstrapServers("localhost:9093")
           .setAcks("all")
           .setLingerMs(1)
           .setKeySerializer("org.apache.kafka.common.serialization.StringSerializer")

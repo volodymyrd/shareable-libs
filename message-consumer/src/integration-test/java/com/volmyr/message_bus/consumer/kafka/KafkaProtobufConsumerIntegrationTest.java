@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.google.common.collect.ImmutableList;
 import com.volmyr.message_bus.MessageEvent;
 import com.volmyr.message_bus.MessageEventType;
+import com.volmyr.message_bus.consumer.MessageConsumerException;
+import com.volmyr.message_bus.consumer.kafka.KafkaMessageConsumerConfig.AutoOffsetReset;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -14,20 +16,27 @@ public class KafkaProtobufConsumerIntegrationTest {
 
   private static final KafkaProtobufConsumer CONSUMER = new KafkaProtobufConsumer(
       ImmutableList.of("topic1"),
-      2_000,
+      10_000,
       KafkaMessageConsumerConfig.newBuilder()
-          .setBootstrapServers("localhost:9092")
+          .setBootstrapServers("localhost:9093")
           .setGroupId("group")
-          .setEnableAutoCommit(true)
-          .setAutoCommitIntervalMs(1000)
+          //.setEnableAutoCommit(true)
+          //.setAutoCommitIntervalMs(1000)
+          .setAutoOffsetReset(AutoOffsetReset.EARLIEST)
           .setKeyDeserializer("org.apache.kafka.common.serialization.StringDeserializer")
           .setValueDeserializer("org.apache.kafka.common.serialization.ByteArrayDeserializer")
           .build()) {
 
+    private int counter;
+
     @Override
-    public void handle(MessageEvent event) {
+    public void handle(MessageEvent event) throws MessageConsumerException {
       assertThat(event.getType()).isEqualTo(MessageEventType.TYPE1);
       assertThat(event.getId()).isNotEmpty();
+      counter++;
+      if (counter < 10) {
+        throw new MessageConsumerException("Counter less 10 but is " + counter);
+      }
     }
   };
 
