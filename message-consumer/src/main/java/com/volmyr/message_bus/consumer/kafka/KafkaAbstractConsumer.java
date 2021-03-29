@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableMap;
 import com.volmyr.message_bus.MessageEvent;
 import com.volmyr.message_bus.consumer.MessageConsumer;
 import com.volmyr.message_bus.consumer.MessageConsumerException;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -51,6 +50,9 @@ public abstract class KafkaAbstractConsumer<K, V> implements MessageConsumer {
       propertiesBuilder.put(
           ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, config.getAutoCommitIntervalMs());
     }
+    propertiesBuilder.put(
+        ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, config.getAutoOffsetReset().name().toLowerCase());
+
     if (!isNullOrEmpty(config.getKeyDeserializer())) {
       propertiesBuilder
           .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, config.getKeyDeserializer());
@@ -68,7 +70,7 @@ public abstract class KafkaAbstractConsumer<K, V> implements MessageConsumer {
     try {
       consumer.subscribe(topics);
       while (!closed.get()) {
-        ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(pollDurationMs));
+        ConsumerRecords<K, V> records = consumer.poll(pollDurationMs);
         if (!records.isEmpty()) {
           logger.info("Consumer {} got {} records, start handling...", this, records.count());
         } else {

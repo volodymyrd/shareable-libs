@@ -25,7 +25,7 @@ subprojects {
                 assertj        : '3.19.0',
                 junit          : '5.7.0',
                 guava          : '30.1-jre',
-                kafka          : '2.7.0',
+                kafka          : '1.1.1',
                 protobuf       : '3.12.1',
                 protobuf_gradle: '0.8.12',
                 slf4j          : '1.7.26',

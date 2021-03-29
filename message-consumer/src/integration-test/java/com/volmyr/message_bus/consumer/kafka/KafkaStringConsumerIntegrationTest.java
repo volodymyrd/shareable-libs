@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 import com.volmyr.message_bus.MessageEvent;
 import com.volmyr.message_bus.MessageEventType;
 import com.volmyr.message_bus.consumer.MessageConsumerException;
+import com.volmyr.message_bus.consumer.kafka.KafkaMessageConsumerConfig.AutoOffsetReset;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -21,6 +22,7 @@ public class KafkaStringConsumerIntegrationTest {
           .setGroupId("group")
           .setEnableAutoCommit(false)
           //.setAutoCommitIntervalMs(1000)
+          .setAutoOffsetReset(AutoOffsetReset.EARLIEST)
           .setKeyDeserializer("org.apache.kafka.common.serialization.StringDeserializer")
           .setValueDeserializer("org.apache.kafka.common.serialization.StringDeserializer")
           .build()) {
