@@ -1,4 +1,5 @@
 rootProject.name = 'shareable-libs'
+include 'message-bus-integration-tests'
 include 'message-bus-model'
 include 'message-consumer'
 include 'message-producer'

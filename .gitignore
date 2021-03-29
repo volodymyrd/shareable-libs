@@ -2,6 +2,10 @@
 .idea
 .gradle
 
+message-bus-integration-tests/build
+message-bus-integration-tests/src/main/generated
+message-bus-integration-tests/out
+
 message-bus-model/build
 message-bus-model/src/main/generated
 message-bus-model/out
