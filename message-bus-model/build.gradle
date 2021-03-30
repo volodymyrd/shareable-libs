@@ -41,3 +41,33 @@ jar {
 
     baseName 'message-bus-model'
 }
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.volmyr.shareable'
+            artifactId = 'message-bus-model'
+            version = version
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'Message Bus Model'
+                description = 'Provide Message Bus Data Model'
+                developers {
+                    developer {
+                        id = 'volodymyrd'
+                        name = 'Volodymyr Dotsenko'
+                        email = 'volodymyrdotsenko@volmyr.com'
+                    }
+                }
+            }
+        }
+    }
+}
