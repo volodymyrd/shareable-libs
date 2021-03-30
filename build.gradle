@@ -96,7 +96,7 @@ subprojects {
                 credentials {
                     // ~/.gradle/gradle.properties
                     username = project.findProperty("repo.user") ?: System.getenv("USERNAME")
-                    password = project.findProperty("mvn_repo_rw.key") ?: System.getenv("TOKEN")
+                    password = project.findProperty("repo.key") ?: System.getenv("TOKEN")
                 }
             }
         }
