@@ -27,6 +27,7 @@ public abstract class KafkaAbstractConsumer<K, V> implements MessageConsumer {
 
   private static final Logger logger = LoggerFactory.getLogger(KafkaAbstractConsumer.class);
 
+  private final AtomicBoolean started = new AtomicBoolean(false);
   private final AtomicBoolean closed = new AtomicBoolean(false);
   private final ImmutableList<String> topics;
   private final int pollDurationMs;
@@ -70,6 +71,7 @@ public abstract class KafkaAbstractConsumer<K, V> implements MessageConsumer {
     try {
       consumer.subscribe(topics);
       while (!closed.get()) {
+        started.set(true);
         ConsumerRecords<K, V> records = consumer.poll(pollDurationMs);
         if (!records.isEmpty()) {
           logger.info("Consumer {} got {} records, start handling...", this, records.count());
@@ -88,8 +90,16 @@ public abstract class KafkaAbstractConsumer<K, V> implements MessageConsumer {
       }
     } finally {
       logger.debug("Close the consumer {}", this);
+      started.set(false);
       consumer.close();
     }
+  }
+
+  @Override
+  public boolean isAlive() {
+    return started.get()
+        && !closed.get()
+        && Thread.currentThread().isAlive();
   }
 
   @Override

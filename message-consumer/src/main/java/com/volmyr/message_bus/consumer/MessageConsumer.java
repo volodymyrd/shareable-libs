@@ -13,6 +13,14 @@ public interface MessageConsumer extends Runnable {
   void handle(MessageEvent event) throws MessageConsumerException;
 
   /**
+   * Tests if this consumer is alive.
+   *
+   * @return <code>true</code> if this consumer is alive;
+   * <code>false</code> otherwise.
+   */
+  boolean isAlive();
+
+  /**
    * Closes the consumer and releases resources.
    */
   void shutdown();
