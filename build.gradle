@@ -10,7 +10,7 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: "name.remal.sonarlint"
 
-    version = '0.0.1-SNAPSHOT'
+    version = '0.0.2-SNAPSHOT'
 
     sonarlint {
         ignoreFailures = false
