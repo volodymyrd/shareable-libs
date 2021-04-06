@@ -14,7 +14,9 @@ import com.volmyr.message_bus.producer.ResponseType;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -48,7 +50,7 @@ public class KafkaProtobufProducerIntegrationTest {
       ImmutableMap.of("bootstrap.servers", KAFKA_SERVERS));
 
   @BeforeAll
-  static void setUp() throws Exception {
+  static void setUp() throws InterruptedException, ExecutionException, TimeoutException {
     KafkaFuture<Set<String>> topicsFuture = ADMIN_CLIENT.listTopics().names();
     Set<String> topics = topicsFuture.get(1, TimeUnit.MINUTES);
     if (!topics.contains(TOPIC)) {

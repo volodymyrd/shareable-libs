@@ -21,7 +21,9 @@ import com.volmyr.message_bus.producer.kafka.KafkaProtobufProducer;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.common.KafkaFuture;
@@ -86,7 +88,7 @@ public class KafkaProtobufConsumerIntegrationTest {
 
   @Test
   @Order(2)
-  void assertTopicExists() throws Exception {
+  void assertTopicExists() throws InterruptedException, ExecutionException, TimeoutException {
     KafkaFuture<Set<String>> topicsFuture = ADMIN_CLIENT.listTopics().names();
     Set<String> topics = topicsFuture.get(1, TimeUnit.MINUTES);
 
@@ -95,13 +97,12 @@ public class KafkaProtobufConsumerIntegrationTest {
 
   @Test
   @Order(3)
-  void shouldConsumeMessages() throws Exception {
+  void shouldConsumeMessages() throws MessageConsumerException, InterruptedException {
     Thread thread = new Thread(CONSUMER);
     thread.start();
-    Thread.sleep(20_000);
-    CONSUMER.shutdown();
+    Thread.sleep(10_000);
     verify(CONSUMER, times(10)).handle(EVENT);
-    Thread.sleep(3_000);
+    Thread.sleep(1_000);
   }
 
   @AfterAll
@@ -113,7 +114,7 @@ public class KafkaProtobufConsumerIntegrationTest {
 
   static class KafkaProtobufConsumerImpl extends KafkaProtobufConsumer {
 
-    protected KafkaProtobufConsumerImpl(
+    KafkaProtobufConsumerImpl(
         ImmutableList<String> topics, int pollDurationMs, KafkaMessageConsumerConfig config) {
       super(topics, pollDurationMs, config);
     }

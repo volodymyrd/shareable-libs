@@ -17,6 +17,7 @@ subprojects {
         excludes {
             //source '**/*Test.java'
             message 'java:S5960'
+            message 'java:S3252'
         }
     }
 
