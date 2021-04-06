@@ -26,6 +26,7 @@ subprojects {
                 junit          : '5.7.0',
                 guava          : '30.1-jre',
                 kafka          : '1.1.1',
+                mockito        : '3.8.0',
                 protobuf       : '3.12.1',
                 protobuf_gradle: '0.8.12',
                 slf4j          : '1.7.26',
@@ -53,6 +54,8 @@ subprojects {
                      "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
                      "org.junit.jupiter:junit-jupiter-params:${versions.junit}"
         ]
+
+        libs.test_mock = "org.mockito:mockito-junit-jupiter:${versions.mockito}"
     }
 
     sourceCompatibility = targetCompatibility = 1.8
