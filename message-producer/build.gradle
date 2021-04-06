@@ -112,11 +112,40 @@ def integrationTestConfig = {
     }
 }
 
+def DOCKER_COMPOSE_FILE = "${project.projectDir}/docker-compose.yml"
+
+task startKafkaDocker() {
+    doLast {
+        println('Starting a kafka docker compose...')
+        def execute = "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d".execute()
+        execute.waitFor()
+        if (execute.exitValue() != 0) {
+            throw new GradleException(
+                    "Error starting a kafka docker compose: ${execute.errorStream.text}")
+        }
+    }
+}
+
+task stopKafkaDocker() {
+    doLast {
+        println('Stopping a kafka docker compose...')
+        def execute = "docker-compose -f ${DOCKER_COMPOSE_FILE} down".execute()
+        execute.waitFor()
+        if (execute.exitValue() != 0) {
+            throw new GradleException(
+                    "Error stoping a kafka docker compose: ${execute.errorStream.text}")
+        }
+    }
+}
+
 task iTest(type: Test) {
+    dependsOn startKafkaDocker
     useJUnitPlatform()
 
     configure integrationTestConfig
 }
+
+iTest.finalizedBy stopKafkaDocker
 
 publishing {
     publications {

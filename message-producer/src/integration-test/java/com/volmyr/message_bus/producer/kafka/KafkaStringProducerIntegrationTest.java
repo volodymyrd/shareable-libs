@@ -42,6 +42,7 @@ public class KafkaStringProducerIntegrationTest {
 
     assertThat(response.getType()).isEqualTo(ResponseType.KAFKA);
     assertThat(response.getKafkaResponse().getTopic()).isNotEmpty();
+    assertThat(response.getKafkaResponse().getSerializedValueSize()).isGreaterThan(1);
   }
 
   @AfterAll

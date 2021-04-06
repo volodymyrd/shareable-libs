@@ -1,0 +1,24 @@
+# https://github.com/bitnami/bitnami-docker-kafka/tree/1.1.1-debian-9-r54
+version: "2"
+
+services:
+  zookeeper:
+#    image: "docker.io/bitnami/zookeeper:3.4.12-debian-9-r54"
+    image: "docker.io/bitnami/zookeeper:3"
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: "docker.io/bitnami/kafka:1.1.1-debian-9-r54"
+    ports:
+      - "9093:9093"
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+    depends_on:
+      - zookeeper
